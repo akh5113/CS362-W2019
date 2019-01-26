@@ -652,6 +652,10 @@ int getCost(int cardNumber)
 //Refactoring Smithy
 int smithyEffect(struct gameState *state, int currentPlayer, int handPos){
 	int i;
+	//BUG 
+	// original statement: for(i=0; i < 3; i++)
+	// bug intorudced: changed i < 3 to i <= 3
+	// the bug will allow to draw one extra card
 	for (i = 0; i < 3; i++){
 		drawCard(currentPlayer, state);
 	}
@@ -711,13 +715,31 @@ int greatHallEffect(int currentPlayer, struct gameState *state, int handPos) {
 	discardCard(handPos, currentPlayer, state, 0);
 	return 0;
 }
-//refactoring outpost
-int outpostEffect(struct gameState *state, int handPos, int currentPlayer) {
-	//set outpost flag
-	state->outpostPlayed++;
 
-	//discard card
+//refacotring council_room
+int councilRoomEffect(int currentPlayer, struct gameState *state, int handPos) {
+	int i = 0;
+	//+4 Cards
+	for (i = 0; i < 4; i++)
+	{
+		drawCard(currentPlayer, state);
+	}
+
+	//+1 Buy
+	state->numBuys++;
+
+	//Each other player draws a card
+	for (i = 0; i < state->numPlayers; i++)
+	{
+		if (i != currentPlayer)
+		{
+			drawCard(i, state);
+		}
+	}
+
+	//put played card in played card pile
 	discardCard(handPos, currentPlayer, state, 0);
+
 	return 0;
 }
 
@@ -772,6 +794,8 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 	*/
 
     case council_room:
+		councilRoomEffect(currentPlayer, state, handPos);
+		/*
       //+4 Cards
       for (i = 0; i < 4; i++)
 	{
@@ -794,7 +818,8 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       discardCard(handPos, currentPlayer, state, 0);
 			
       return 0;
-			
+			*/
+
     case feast:
       //gain card with cost up to 5
       //Backup hand
@@ -1252,15 +1277,13 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       return 0;
 		
     case outpost:
-		outpostEffect(state, handPos, currentPlayer);
-		/*
       //set outpost flag
       state->outpostPlayed++;
 			
       //discard card
       discardCard(handPos, currentPlayer, state, 0);
       return 0;
-	  */
+	  
 		
     case salvager:
       //+1 buy
