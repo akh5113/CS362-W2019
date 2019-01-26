@@ -656,7 +656,7 @@ int smithyEffect(struct gameState *state, int currentPlayer, int handPos){
 	// original statement: for(i=0; i < 3; i++)
 	// bug intorudced: changed i < 3 to i <= 3
 	// the bug will allow to draw one extra card
-	for (i = 0; i < 3; i++){
+	for (i = 0; i <= 3; i++){
 		drawCard(currentPlayer, state);
 	}
 
@@ -666,13 +666,16 @@ int smithyEffect(struct gameState *state, int currentPlayer, int handPos){
 }
 
 //Refactoring Adventurer
-int adventurerEffect(int drawntreasure, struct gameState *state, int currentPlayer, int temphand[MAX_HAND]) {
-	int z = 0;
+int adventurerEffect(int drawntreasure, struct gameState *state, int currentPlayer, int temphand[MAX_HAND], int z) {
 	int cardDrawn;
 	while (drawntreasure < 2) {
+		//BUG
+		//commenting out the section where we check to see if we need to shuffle the deck
+		/*
 		if (state->deckCount[currentPlayer] < 1) {//if the deck is empty we need to shuffle discard and add to deck
 			shuffle(currentPlayer, state);
 		}
+		*/
 		drawCard(currentPlayer, state);
 		cardDrawn = state->hand[currentPlayer][state->handCount[currentPlayer] - 1];//top card of hand is most recently drawn card.
 		if (cardDrawn == copper || cardDrawn == silver || cardDrawn == gold)
@@ -699,7 +702,10 @@ int villageEffect(int currentPlayer, struct gameState *state, int handPos) {
 	state->numActions = state->numActions + 2;
 
 	//discard played card from hand
-	discardCard(handPos, currentPlayer, state, 0);
+	//BUG INSERTED HERE
+	//changed the final parameter of discardCard from 0 to 1
+	//discardCard(handPos, currentPlayer, state, 0);
+	discardCard(handPos, currentPlayer, state, 1);
 	return 0;
 }
 
@@ -731,10 +737,14 @@ int councilRoomEffect(int currentPlayer, struct gameState *state, int handPos) {
 	//Each other player draws a card
 	for (i = 0; i < state->numPlayers; i++)
 	{
-		if (i != currentPlayer)
-		{
+		//BUG
+		//Removing if statement that checks for the current player
+		//This will allow the current player to also draw an additional card which
+		//is incorrect behavior for this card
+		//if (i != currentPlayer)
+		//{
 			drawCard(i, state);
-		}
+		//}
 	}
 
 	//put played card in played card pile
@@ -759,7 +769,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
   //variable cardDrawn not needed as it will be initialized in the adventurerEffect function
   //int cardDrawn;
   //variable z not needed as it will be initialized in the adventurerEffect function
-  //int z = 0;// this is the counter for the temp hand
+  int z = 0;// this is the counter for the temp hand
   if (nextPlayer > (state->numPlayers - 1)){
     nextPlayer = 0;
   }
@@ -770,7 +780,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
     {
     case adventurer:
 		//refactored
-		adventurerEffect(drawntreasure, state, currentPlayer, temphand);
+		adventurerEffect(drawntreasure, state, currentPlayer, temphand, z);
 		/*
       while(drawntreasure<2){
 	if (state->deckCount[currentPlayer] <1){//if the deck is empty we need to shuffle discard and add to deck
