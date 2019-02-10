@@ -1,0 +1,234 @@
+        -:    0:Source:testme.c
+        -:    0:Graph:testme.gcno
+        -:    0:Data:testme.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:#include<stdio.h>
+        -:    2:#include<string.h>
+        -:    3:#include<stdlib.h>
+        -:    4:#include<time.h>
+        -:    5:
+        -:    6://number of times inputChar() is called
+        -:    7:int call = 0;
+        -:    8:
+function inputChar called 391440 returned 100% blocks executed 100%
+   391440:    9:char inputChar()
+        -:   10:{
+        -:   11:    // TODO: rewrite this function
+        -:   12:    
+        -:   13:    //array of chars
+   391440:   14:    char characters[9] = {'[', '{', '(', ')', '}', ']', 'a', ' ', 'x'};
+   391440:   15:    char stringChars[9] = {'r', 'e', 's', 't','\0', 'r', 'e', 's', 't'};
+        -:   16:    //range
+   391440:   17:    int low = 0;
+   391440:   18:    int high = 9;
+        -:   19:
+        -:   20:    //get random number 
+        -:   21:    int randNum;
+   391440:   22:    randNum = rand()% (high - low +1) + low;
+call    0 returned 100%
+        -:   23:    //printf("Random number: %d yields character %c\n", randNum, characters[randNum]);
+   391440:   24:    if(call % 2 == 0){
+branch  0 taken 86% (fallthrough)
+branch  1 taken 14%
+   335520:   25:        return stringChars[randNum];
+        -:   26:    }
+        -:   27:    else{
+    55920:   28:        return characters[randNum];
+        -:   29:    }
+        -:   30:}
+        -:   31:
+        -:   32:// declare string
+        -:   33:char string[6];
+        -:   34:
+function inputString called 55920 returned 100% blocks executed 100%
+    55920:   35:char *inputString()
+        -:   36:{
+        -:   37:    // TODO: rewrite this function
+    55920:   38:    call++;
+        -:   39:
+        -:   40:    //fill string with chars from inputChar() func
+        -:   41:    int i;
+        -:   42:    char c;
+   391440:   43:    for(i = 0; i < 6; i++){
+branch  0 taken 86%
+branch  1 taken 14% (fallthrough)
+   335520:   44:        c = inputChar();
+call    0 returned 100%
+   335520:   45:        string[i] = c;
+        -:   46:    }
+    55920:   47:    return string;
+        -:   48:}
+        -:   49:
+function testme called 1 returned 0% blocks executed 100%
+        1:   50:void testme()
+        -:   51:{
+        1:   52:  int tcCount = 0;
+        -:   53:  char *s;
+        -:   54:  char c;
+        1:   55:  int state = 0;
+        -:   56:  //coverage testing variables
+        1:   57:  int if1 = 0;
+        1:   58:  int if2 = 0;
+        1:   59:  int if3 = 0;
+        1:   60:  int if4 = 0;
+        1:   61:  int if5 = 0;
+        1:   62:  int if6 = 0;
+        1:   63:  int if7 = 0;
+        1:   64:  int if8 = 0;
+        1:   65:  int if9 = 0;
+        1:   66:  int if10 = 0;
+        1:   67:  int ifSum = 0;
+        1:   68:  float ifperc = 0;
+        -:   69:
+        -:   70:  while (1)
+        -:   71:  {
+    55920:   72:    tcCount++;
+    55920:   73:    call++;
+    55920:   74:    c = inputChar();
+call    0 returned 100%
+    55920:   75:    s = inputString();
+call    0 returned 100%
+    55920:   76:    printf("Iteration %d: c = %c, s = %s, state = %d\n", tcCount, c, s, state);
+call    0 returned 100%
+        -:   77:
+    55920:   78:    if (c == '[' && state == 0){
+branch  0 taken 10% (fallthrough)
+branch  1 taken 90%
+branch  2 taken 1% (fallthrough)
+branch  3 taken 99%
+        1:   79:        state = 1;
+        1:   80:        if1++;
+        -:   81:    }
+    55920:   82:    if (c == '(' && state == 1){
+branch  0 taken 10% (fallthrough)
+branch  1 taken 90%
+branch  2 taken 1% (fallthrough)
+branch  3 taken 99%
+        1:   83:        state = 2;
+        1:   84:        if2++;
+        -:   85:    }
+    55920:   86:    if (c == '{' && state == 2){
+branch  0 taken 10% (fallthrough)
+branch  1 taken 90%
+branch  2 taken 1% (fallthrough)
+branch  3 taken 99%
+        1:   87:        state = 3;
+        1:   88:        if3++;
+        -:   89:    }
+    55920:   90:    if (c == ' '&& state == 3){
+branch  0 taken 10% (fallthrough)
+branch  1 taken 90%
+branch  2 taken 1% (fallthrough)
+branch  3 taken 99%
+        1:   91:        state = 4;
+        1:   92:        if4++;
+        -:   93:    }
+    55920:   94:    if (c == 'a' && state == 4){
+branch  0 taken 10% (fallthrough)
+branch  1 taken 90%
+branch  2 taken 1% (fallthrough)
+branch  3 taken 99%
+        1:   95:        state = 5;
+        1:   96:        if5++;
+        -:   97:    }
+    55920:   98:    if (c == 'x' && state == 5){
+branch  0 taken 10% (fallthrough)
+branch  1 taken 90%
+branch  2 taken 1% (fallthrough)
+branch  3 taken 99%
+        1:   99:        state = 6;
+        1:  100:        if6++;
+        -:  101:    }
+    55920:  102:    if (c == '}' && state == 6){
+branch  0 taken 10% (fallthrough)
+branch  1 taken 90%
+branch  2 taken 1% (fallthrough)
+branch  3 taken 99%
+        1:  103:        state = 7;
+        1:  104:        if7++;
+        -:  105:    }
+    55920:  106:    if (c == ')' && state == 7){
+branch  0 taken 10% (fallthrough)
+branch  1 taken 90%
+branch  2 taken 1% (fallthrough)
+branch  3 taken 99%
+        1:  107:        state = 8;
+        1:  108:        if8++;
+        -:  109:    }
+    55920:  110:    if (c == ']' && state == 8){
+branch  0 taken 10% (fallthrough)
+branch  1 taken 90%
+branch  2 taken 1% (fallthrough)
+branch  3 taken 99%
+        1:  111:        state = 9;
+        1:  112:        if9++;
+        -:  113:	//exit(200);
+        -:  114:    }
+    55920:  115:    if (s[0] == 'r' && s[1] == 'e'
+branch  0 taken 20% (fallthrough)
+branch  1 taken 80%
+branch  2 taken 20% (fallthrough)
+branch  3 taken 80%
+     2187:  116:       && s[2] == 's' && s[3] == 'e'
+branch  0 taken 18% (fallthrough)
+branch  1 taken 82%
+branch  2 taken 20% (fallthrough)
+branch  3 taken 80%
+       78:  117:       && s[4] == 't' && s[5] == '\0'
+branch  0 taken 22% (fallthrough)
+branch  1 taken 78%
+branch  2 taken 6% (fallthrough)
+branch  3 taken 94%
+        1:  118:       && state == 9)
+branch  0 taken 100% (fallthrough)
+branch  1 taken 0%
+        -:  119:    {
+        1:  120:      if10++;
+        1:  121:      printf("error \n");
+call    0 returned 100%
+        1:  122:      ifSum = if1 + if2 + if3 + if4 + if5 + if6 + if7 + if8 + if9 + if10;
+        1:  123:      ifperc = (ifSum/tcCount) * 10;
+        -:  124:
+        -:  125:      //print out coverage information
+        1:  126:      printf("Coverage for the 1st if statement is: %d\n", if1);
+call    0 returned 100%
+        1:  127:      printf("Coverage for the 2nd if statement is: %d\n", if2);
+call    0 returned 100%
+        1:  128:      printf("Coverage for the 3rd if statement is: %d\n", if3);
+call    0 returned 100%
+        1:  129:      printf("Coverage for the 4th if statement is: %d\n", if4);
+call    0 returned 100%
+        1:  130:      printf("Coverage for the 5th if statement is: %d\n", if5);
+call    0 returned 100%
+        1:  131:      printf("Coverage for the 6th if statement is: %d\n", if6);
+call    0 returned 100%
+        1:  132:      printf("Coverage for the 7th if statement is: %d\n", if7);
+call    0 returned 100%
+        1:  133:      printf("Coverage for the 8th if statement is: %d\n", if8);
+call    0 returned 100%
+        1:  134:      printf("Coverage for the 9th if statement is: %d\n", if9);
+call    0 returned 100%
+        1:  135:      printf("Coverage for the 10th if statement (error) is: %d\n", if10);
+call    0 returned 100%
+        1:  136:      printf("It took %d iterations to reach the error statement\n", tcCount);
+call    0 returned 100%
+        1:  137:      printf("An 'if' statement was executed %.10f percent of the time\n", ifperc);
+call    0 returned 100%
+        1:  138:      exit(200);
+call    0 returned 0%
+        -:  139:    }
+    55919:  140:  }
+        -:  141:}
+        -:  142:
+        -:  143:
+function main called 1 returned 0% blocks executed 80%
+        1:  144:int main(int argc, char *argv[])
+        -:  145:{
+        1:  146:    srand(time(NULL));
+call    0 returned 100%
+call    1 returned 100%
+        1:  147:    testme();
+call    0 returned 0%
+    #####:  148:    return 0;
+        -:  149:}
