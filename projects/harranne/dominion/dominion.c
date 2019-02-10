@@ -5,7 +5,8 @@
 #include <math.h>
 #include <stdlib.h>
 
-//test comment by harranne
+//test comment by harranne 
+//test
 
 int compare(const void* a, const void* b) {
   if (*(int*)a > *(int*)b)
@@ -238,30 +239,37 @@ int playCard(int handPos, int choice1, int choice2, int choice3, struct gameStat
   //check if it is the right phase
   if (state->phase != 0)
     {
+	  printf("failed at state->phase check\n");
       return -1;
     }
 	
   //check if player has enough actions
   if ( state->numActions < 1 )
     {
+	  printf("failed at state->numActions check\n");
       return -1;
     }
 	
   //get card played
   card = handCard(handPos, state);
+  printf("card returned = %d\n", card);
+  printf("adventurer = %d\n", adventurer);
+  printf("treatsure_map = %d\n", treasure_map);
 	
   //check if selected card is an action
-  if ( card < adventurer || card > treasure_map )
-    {
+  if ( card < adventurer || card > treasure_map ){
+	  printf("failed at 'selected card is an action' check\n");
       return -1;
     }
 	
   //play card
   if ( cardEffect(card, choice1, choice2, choice3, state, handPos, &coin_bonus) < 0 )
     {
+	  printf("failed at cardEffect call\n");
       return -1;
     }
 	
+
   //reduce number of actions
   state->numActions--;
 
@@ -651,12 +659,14 @@ int getCost(int cardNumber)
 
 //Refactoring Smithy
 int smithyEffect(struct gameState *state, int currentPlayer, int handPos){
+	//printf("in smithyEffect\n");
 	int i;
 	//BUG 
 	// original statement: for(i=0; i < 3; i++)
 	// bug intorudced: changed i < 3 to i <= 3
 	// the bug will allow to draw one extra card
 	for (i = 0; i <= 3; i++){
+		printf("i = %d\n", i);
 		drawCard(currentPlayer, state);
 	}
 
@@ -678,10 +688,12 @@ int adventurerEffect(int drawntreasure, struct gameState *state, int currentPlay
 		*/
 		drawCard(currentPlayer, state);
 		cardDrawn = state->hand[currentPlayer][state->handCount[currentPlayer] - 1];//top card of hand is most recently drawn card.
+		printf("card draw: %d\n", cardDrawn);
 		if (cardDrawn == copper || cardDrawn == silver || cardDrawn == gold)
 			drawntreasure++;
 		else {
 			temphand[z] = cardDrawn;
+			//printf("temphand[z] = %d\n", temphand[z]);
 			state->handCount[currentPlayer]--; //this should just remove the top card (the most recently drawn one).
 			z++;
 		}
@@ -737,6 +749,7 @@ int councilRoomEffect(int currentPlayer, struct gameState *state, int handPos) {
 	//Each other player draws a card
 	for (i = 0; i < state->numPlayers; i++)
 	{
+		//printf("drawing card for %d\n", i);
 		//BUG
 		//Removing if statement that checks for the current player
 		//This will allow the current player to also draw an additional card which
@@ -755,6 +768,7 @@ int councilRoomEffect(int currentPlayer, struct gameState *state, int handPos) {
 
 int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus)
 {
+	//printf("in cardEffect\n card is int %d\n", card);
   int i;
   int j;
   int k;
@@ -949,6 +963,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 		
 	  //refactored
 	case smithy:
+		//printf("in case smithy:\n");
 		smithyEffect(state, currentPlayer, handPos);
 
       //+3 Cards
