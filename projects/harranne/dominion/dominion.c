@@ -140,16 +140,14 @@ int initializeGame(int numPlayers, int kingdomCards[10], int randomSeed,
   for (i = 0; i < numPlayers; i++)
     {
       state->deckCount[i] = 0;
-      for (j = 0; j < 3; j++)
-	{
-	  state->deck[i][j] = estate;
-	  state->deckCount[i]++;
-	}
-      for (j = 3; j < 10; j++)
-	{
-	  state->deck[i][j] = copper;
-	  state->deckCount[i]++;		
-	}
+      for (j = 0; j < 3; j++){
+		state->deck[i][j] = estate;
+		state->deckCount[i]++;
+		}
+      for (j = 3; j < 10; j++){
+		state->deck[i][j] = copper;
+		state->deckCount[i]++;		
+		}
     }
 
   //shuffle player decks
@@ -651,6 +649,8 @@ int getCost(int cardNumber)
 
 //Refactoring Smithy
 int smithyEffect(struct gameState *state, int currentPlayer, int handPos){
+	//printf("in smithyEffect function\n");
+
 	int i;
 	//BUG 
 	// original statement: for(i=0; i < 3; i++)
@@ -660,8 +660,11 @@ int smithyEffect(struct gameState *state, int currentPlayer, int handPos){
 		drawCard(currentPlayer, state);
 	}
 
+	//printf("current player = %d\n", currentPlayer);
+	//printf("handPos = %d\n", handPos);
 	//discard card from hand
 	discardCard(handPos, currentPlayer, state, 0);
+	//printf("post discard\n");
 	return 0;
 }
 
@@ -669,6 +672,7 @@ int smithyEffect(struct gameState *state, int currentPlayer, int handPos){
 int adventurerEffect(int drawntreasure, struct gameState *state, int currentPlayer, int temphand[MAX_HAND], int z) {
 	int cardDrawn;
 	while (drawntreasure < 2) {
+		//printf("in while statement within adventurerEffect\n");
 		//BUG
 		//commenting out the section where we check to see if we need to shuffle the deck
 		/*
@@ -678,6 +682,7 @@ int adventurerEffect(int drawntreasure, struct gameState *state, int currentPlay
 		*/
 		drawCard(currentPlayer, state);
 		cardDrawn = state->hand[currentPlayer][state->handCount[currentPlayer] - 1];//top card of hand is most recently drawn card.
+		//printf("card drawn = %d\n", cardDrawn);
 		if (cardDrawn == copper || cardDrawn == silver || cardDrawn == gold)
 			drawntreasure++;
 		else {
@@ -780,7 +785,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
     {
     case adventurer:
 		//refactored
-		adventurerEffect(drawntreasure, state, currentPlayer, temphand, z);
+		return adventurerEffect(drawntreasure, state, currentPlayer, temphand, z);
 		/*
       while(drawntreasure<2){
 	if (state->deckCount[currentPlayer] <1){//if the deck is empty we need to shuffle discard and add to deck
@@ -804,7 +809,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 	*/
 
     case council_room:
-		councilRoomEffect(currentPlayer, state, handPos);
+		return councilRoomEffect(currentPlayer, state, handPos);
 		/*
       //+4 Cards
       for (i = 0; i < 4; i++)
@@ -949,7 +954,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 		
 	  //refactored
 	case smithy:
-		smithyEffect(state, currentPlayer, handPos);
+		return smithyEffect(state, currentPlayer, handPos);
 
       //+3 Cards
       /*for (i = 0; i < 3; i++)
@@ -1357,11 +1362,13 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
 
 int discardCard(int handPos, int currentPlayer, struct gameState *state, int trashFlag)
 {
-	
+	//printf("in discardCard function\n");
   //if card is not trashed, added to Played pile 
   if (trashFlag < 1)
     {
-      //add card to played pile
+	  //printf("in trasflag < 1\n");
+	  //printf("%d\n", state->hand[currentPlayer][handPos]);
+	  //add card to played pile
       state->playedCards[state->playedCardCount] = state->hand[currentPlayer][handPos]; 
       state->playedCardCount++;
     }
@@ -1372,16 +1379,19 @@ int discardCard(int handPos, int currentPlayer, struct gameState *state, int tra
   //remove card from player's hand
   if ( handPos == (state->handCount[currentPlayer] - 1) ) 	//last card in hand array is played
     {
+	 // printf("in first if statement\n");
       //reduce number of cards in hand
       state->handCount[currentPlayer]--;
     }
   else if ( state->handCount[currentPlayer] == 1 ) //only one card in hand
     {
+	 // printf("in second if statement\n");
       //reduce number of cards in hand
       state->handCount[currentPlayer]--;
     }
   else 	
     {
+	  //printf("in else statement\n");
       //replace discarded card with last card in hand
       state->hand[currentPlayer][handPos] = state->hand[currentPlayer][ (state->handCount[currentPlayer] - 1)];
       //set last card to -1
